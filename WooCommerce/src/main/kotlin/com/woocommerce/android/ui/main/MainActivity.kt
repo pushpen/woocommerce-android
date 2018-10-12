@@ -27,6 +27,8 @@ import com.woocommerce.android.ui.main.BottomNavigationPosition.ORDERS
 import com.woocommerce.android.ui.orders.OrderListFragment
 import com.woocommerce.android.ui.prefs.AppSettingsActivity
 import com.woocommerce.android.util.ActivityUtils
+import com.woocommerce.android.util.WooLog
+import com.woocommerce.android.util.WooLog.T.DEVICE
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -35,6 +37,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.wordpress.android.login.LoginAnalyticsListener
 import org.wordpress.android.login.LoginMode
 import org.wordpress.android.util.NetworkUtils
+import java.io.File
+import java.io.IOException
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(),
@@ -214,9 +218,24 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun contactSupport() {
+        // Save logcat messages to a temp file
+        //
+        // this is a temporary solution until we get zendesk support integrated
+        val outputFile = File.createTempFile("logcat_", ".txt", externalCacheDir)
+        try {
+            Runtime.getRuntime().exec("logcat -v time -f " + outputFile.absolutePath)
+        } catch (e: IOException) {
+            WooLog.e(DEVICE, "Error saving logcat to file", e)
+        }
+
         val subject = String.format(getString(R.string.support_email_subject), BuildConfig.VERSION_NAME)
         val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:$SUPPORT_EMAIL"))
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject)
+
+        // Attach log file to email
+        emailIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(outputFile))
+
+        // Send email intent
         if (emailIntent.resolveActivity(packageManager) != null) {
             startActivity(emailIntent)
         }

@@ -117,7 +117,7 @@ class MainActivity : AppCompatActivity(),
             return
         }
 
-//        initFragment(savedInstanceState)
+        initFragment(savedInstanceState)
 
         // show the site picker promo if it hasn't been shown and the user has multiple stores
         val promoShown = presenter.hasMultipleStores() && WCPromoDialog.showIfNeeded(this, PromoType.SITE_PICKER)
@@ -127,18 +127,6 @@ class MainActivity : AppCompatActivity(),
         if (!promoShown) {
             AppRatingDialog.showIfNeeded(this)
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        initFragment(null)
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        super.onRestoreInstanceState(savedInstanceState)
-
-        initFragment(savedInstanceState)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

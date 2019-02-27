@@ -222,10 +222,10 @@ class NotificationHandler @Inject constructor(
             // Save temporary notification to the database.
             dispatcher.dispatch(NotificationActionBuilder.newUpdateNotificationAction(it))
 
-            // Fire off the event to fetch the actual notification from the api
-            dispatcher.dispatch(NotificationActionBuilder
-                    .newFetchNotificationAction(FetchNotificationPayload(it.remoteNoteId)))
-        }
+//            // Fire off the event to fetch the actual notification from the api
+//            dispatcher.dispatch(NotificationActionBuilder
+//                    .newFetchNotificationAction(FetchNotificationPayload(it.remoteNoteId)))
+        } ?: println("AMANDA-TEST > NotificationHandler.buildAndShowNotificationFromNoteData > unable to build notification from bundle")
 
         // don't display the notification if user chose to disable this type of notification - note
         // that we skip this for API 26+ since Oreo added per-app notification settings via channels

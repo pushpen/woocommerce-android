@@ -28,13 +28,16 @@ object NotificationsUtils {
      * Builds a [NotificationModel] from a push notification bundle.
      */
     fun buildNotificationModelFromBundle(siteStore: SiteStore, data: Bundle): NotificationModel? {
-        return data.getString(NotificationHandler.PUSH_ARG_NOTE_FULL_DATA)?.let {
+        val result = data.getString(NotificationHandler.PUSH_ARG_NOTE_FULL_DATA)?.let {
             getNotificationJsonFromBase64EncodedData(it)?.let { json ->
             val apiResponse = Gson().fromJson(json.toString(), NotificationApiResponse::class.java)
             val remoteSiteId = NotificationApiResponse.getRemoteSiteId(apiResponse) ?: 0
             val localSiteId = siteStore.getLocalIdForRemoteSiteId(remoteSiteId)
             NotificationApiResponse.notificationResponseToNotificationModel(apiResponse, localSiteId)
         } }
+        println("AMANDA-TEST > NotificationsUtils.buildNotificationModelFromBundle > $result\n localSiteId = ${result?.localSiteId}, remoteNoteId = ${result?.remoteNoteId}")
+
+        return result
     }
 
     /**

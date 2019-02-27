@@ -293,6 +293,8 @@ class NotifsListFragment : TopLevelFragment(),
                 AnalyticsTracker.KEY_TYPE to AnalyticsTracker.VALUE_REVIEW,
                 AnalyticsTracker.KEY_ALREADY_READ to notification.read))
 
+        println("AMANDA-TEST > NotifsListFragment.openReviewDetail > opening notification ${notification.remoteNoteId}")
+
         // If the notification is pending moderation, override the status to display in
         // the detail view.
         val isPendingModeration = pendingModerationRemoteNoteId?.let { it == notification.remoteNoteId } ?: false

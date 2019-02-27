@@ -58,8 +58,11 @@ class MainPresenter @Inject constructor(
         dispatcher.dispatch(AccountActionBuilder.newUpdateAccessTokenAction(UpdateTokenPayload(token)))
     }
 
-    override fun getNotificationByRemoteNoteId(remoteNoteId: Long): NotificationModel? =
-            notificationStore.getNotificationByRemoteId(remoteNoteId)
+    override fun getNotificationByRemoteNoteId(remoteNoteId: Long): NotificationModel? {
+        val result = notificationStore.getNotificationByRemoteId(remoteNoteId)
+        println("AMANDA-TEST > MainPresenter.getNotificationByRemoteNoteId > notification = $result")
+        return result
+    }
 
     override fun hasMultipleStores() = wooCommerceStore.getWooCommerceSites().size > 0
 

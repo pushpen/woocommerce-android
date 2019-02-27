@@ -117,7 +117,7 @@ class MainActivity : AppCompatActivity(),
             return
         }
 
-        initFragment(savedInstanceState)
+//        initFragment(savedInstanceState)
 
         // show the site picker promo if it hasn't been shown and the user has multiple stores
         val promoShown = presenter.hasMultipleStores() && WCPromoDialog.showIfNeeded(this, PromoType.SITE_PICKER)
@@ -127,6 +127,18 @@ class MainActivity : AppCompatActivity(),
         if (!promoShown) {
             AppRatingDialog.showIfNeeded(this)
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        initFragment(null)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+
+        initFragment(savedInstanceState)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -343,7 +355,12 @@ class MainActivity : AppCompatActivity(),
             // Reset this flag now that it's being processed
             intent.removeExtra(FIELD_OPENED_FROM_PUSH)
 
+            println("AMANDA-TEST > MainActivity.initFragment > opened from push notif")
+
             if (intent.getBooleanExtra(FIELD_OPENED_FROM_PUSH_GROUP, false)) {
+
+                println("AMANDA-TEST > MainActivity.initFragment > opened from push group")
+
                 // Reset this flag now that it's being processed
                 intent.removeExtra(FIELD_OPENED_FROM_PUSH_GROUP)
 
@@ -359,6 +376,9 @@ class MainActivity : AppCompatActivity(),
                 // Check for a notification ID - if one is present, open notification
                 val remoteNoteId = intent.getLongExtra(FIELD_REMOTE_NOTE_ID, 0)
                 if (remoteNoteId > 0) {
+
+                    println("AMANDA-TEST > MainActivity.initFragment > remote_note_id = $remoteNoteId")
+
                     // Send track event
                     NotificationHandler.bumpPushNotificationsTappedAnalytics(this, remoteNoteId.toString())
 
@@ -368,6 +388,9 @@ class MainActivity : AppCompatActivity(),
                     // Open the detail view for this notification
                     showNotificationDetail(remoteNoteId)
                 } else {
+
+                    println("AMANDA-TEST > MainActivity.initFragment > remote_note_id = 0")
+
                     // Send analytics for viewing all notifications
                     NotificationHandler.bumpPushNotificationsTappedAllAnalytics(this)
 

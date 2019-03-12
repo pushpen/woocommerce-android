@@ -12,7 +12,6 @@ import org.greenrobot.eventbus.ThreadMode
 import org.wordpress.android.fluxc.Dispatcher
 import org.wordpress.android.fluxc.action.AccountAction
 import org.wordpress.android.fluxc.generated.AccountActionBuilder
-import org.wordpress.android.fluxc.generated.SiteActionBuilder
 import org.wordpress.android.fluxc.generated.WCOrderActionBuilder
 import org.wordpress.android.fluxc.generated.WCProductActionBuilder
 import org.wordpress.android.fluxc.model.notification.NotificationModel
@@ -101,9 +100,6 @@ class MainPresenter @Inject constructor(
             if (event.causeOfChange == AccountAction.FETCH_ACCOUNT) {
                 // The user's account info has been fetched and stored - next, fetch the user's settings
                 dispatcher.dispatch(AccountActionBuilder.newFetchSettingsAction())
-            } else if (event.causeOfChange == AccountAction.FETCH_SETTINGS) {
-                // The user's account settings have also been fetched and stored - now we can fetch the user's sites
-                dispatcher.dispatch(SiteActionBuilder.newFetchSitesAction())
             }
         }
     }

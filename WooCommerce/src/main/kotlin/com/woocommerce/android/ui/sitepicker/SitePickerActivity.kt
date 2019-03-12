@@ -109,7 +109,7 @@ class SitePickerActivity : AppCompatActivity(), SitePickerContract.View, OnSiteC
         showUserInfo()
 
         // set the adapter's site list from cached site data
-        val sites = presenter.getWooSites()
+        val sites = emptyList<SiteModel>() // TODO: presenter.getWooSites()
         if (sites.isEmpty()) {
             progressBar.visibility = View.VISIBLE
         } else {

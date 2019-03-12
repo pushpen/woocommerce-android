@@ -155,15 +155,15 @@ open class WooCommerce : MultiDexApplication(), HasActivityInjector, HasServiceI
     }
 
     override fun onFirstActivityResumed() {
-        // Update the WP.com account details, settings, and site list every time the app is completely restarted
+        // Update the WP.com account details, settings, and selected site every time the app is completely restarted
         if (networkStatus.isConnected()) {
             dispatcher.dispatch(AccountActionBuilder.newFetchAccountAction())
             dispatcher.dispatch(AccountActionBuilder.newFetchSettingsAction())
             dispatcher.dispatch(SiteActionBuilder.newFetchSitesAction())
 
             selectedSite.getIfExists()?.let {
-                val payload = FetchOrderStatusOptionsPayload(it)
-                dispatcher.dispatch(WCOrderActionBuilder.newFetchOrderStatusOptionsAction(payload))
+                dispatcher.dispatch(SiteActionBuilder.newFetchSiteAction(it))
+                dispatcher.dispatch(WCOrderActionBuilder.newFetchOrderStatusOptionsAction(FetchOrderStatusOptionsPayload(it)))
             }
         }
     }

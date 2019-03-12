@@ -125,14 +125,14 @@ class MainSettingsFragment : Fragment(), MainSettingsContract.View {
             listener.onRequestShowLicenses()
         }
 
+        // advertise the site switcher if we haven't already
         if (presenter.hasMultipleStores()) {
-            primaryStoreView.setOnClickListener {
-                AnalyticsTracker.track(SETTINGS_SELECTED_SITE_TAPPED)
-                listener.onRequestShowSitePicker()
-            }
-
-            // advertise the site switcher if we haven't already
             WCPromoTooltip.showIfNeeded(Feature.SITE_SWITCHER, primaryStoreView)
+        }
+
+        primaryStoreView.setOnClickListener {
+            AnalyticsTracker.track(SETTINGS_SELECTED_SITE_TAPPED)
+            listener.onRequestShowSitePicker()
         }
     }
 

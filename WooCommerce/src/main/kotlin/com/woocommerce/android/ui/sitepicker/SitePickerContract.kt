@@ -6,7 +6,7 @@ import org.wordpress.android.fluxc.model.SiteModel
 
 interface SitePickerContract {
     interface Presenter : BasePresenter<View> {
-        fun fetchWooSites()
+        fun fetchWooSimpleSites()
         fun fetchWooSite(site: SiteModel)
         fun getWooSites(): List<SiteModel>
         fun getUserAvatarUrl(): String?

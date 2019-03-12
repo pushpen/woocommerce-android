@@ -159,7 +159,6 @@ open class WooCommerce : MultiDexApplication(), HasActivityInjector, HasServiceI
         if (networkStatus.isConnected()) {
             dispatcher.dispatch(AccountActionBuilder.newFetchAccountAction())
             dispatcher.dispatch(AccountActionBuilder.newFetchSettingsAction())
-            dispatcher.dispatch(SiteActionBuilder.newFetchSitesAction())
 
             selectedSite.getIfExists()?.let {
                 dispatcher.dispatch(SiteActionBuilder.newFetchSiteAction(it))

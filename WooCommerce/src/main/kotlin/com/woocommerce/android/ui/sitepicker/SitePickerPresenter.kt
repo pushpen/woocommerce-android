@@ -39,7 +39,11 @@ class SitePickerPresenter @Inject constructor(
         view = null
     }
 
-    override fun fetchWooSites() {
+    /**
+     * This fetches a list of "simple sites" that are Woo stores - these are lightweight models that
+     * contain only a subset of the SiteModel properties (id, url, and name)
+     */
+    override fun fetchWooSimpleSites() {
         dispatcher.dispatch(WCCoreActionBuilder.newFetchWooSimpleSitesAction())
     }
 
@@ -63,7 +67,6 @@ class SitePickerPresenter @Inject constructor(
     override fun fetchWooSite(site: SiteModel) {
         fetchingSiteId = site.siteId
         dispatcher.dispatch(SiteActionBuilder.newFetchSiteAction(site))
-        dispatcher.dispatch(WCCoreActionBuilder.newFetchSiteSettingsAction(site))
     }
 
     @Suppress("unused")
@@ -97,12 +100,13 @@ class SitePickerPresenter @Inject constructor(
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onSiteChanged(event: OnSiteChanged) {
         if (event.isError) {
-            WooLog.e(T.LOGIN, "Error fetching site " +
+            WooLog.e(T.LOGIN, "Error fetching site $fetchingSiteId " +
                     "${event.error?.type} - ${event.error?.message}")
             view?.siteFetchError()
         } else {
             siteStore.getSiteBySiteId(fetchingSiteId)?.let { site ->
-                // site has been fetched, so verify it's running the right version
+                // site has been fetched, so fetch its settings and verify its running the right version
+                dispatcher.dispatch(WCCoreActionBuilder.newFetchSiteSettingsAction(site))
                 dispatcher.dispatch(WCCoreActionBuilder.newFetchSiteApiVersionAction(site))
             } ?: view?.siteFetchError()
         }

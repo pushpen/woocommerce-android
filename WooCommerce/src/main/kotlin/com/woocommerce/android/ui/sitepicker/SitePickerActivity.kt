@@ -117,7 +117,7 @@ class SitePickerActivity : AppCompatActivity(), SitePickerContract.View, OnSiteC
         }
 
         // fetch the sites
-        presenter.fetchWooSites()
+        presenter.fetchWooSimpleSites()
     }
 
     override fun onResume() {

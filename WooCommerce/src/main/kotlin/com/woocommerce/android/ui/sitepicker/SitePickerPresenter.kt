@@ -1,5 +1,7 @@
 package com.woocommerce.android.ui.sitepicker
 
+import com.woocommerce.android.analytics.AnalyticsTracker
+import com.woocommerce.android.analytics.AnalyticsTracker.Stat
 import com.woocommerce.android.util.WooLog
 import com.woocommerce.android.util.WooLog.T
 import org.greenrobot.eventbus.Subscribe
@@ -12,9 +14,9 @@ import org.wordpress.android.fluxc.model.SiteModel
 import org.wordpress.android.fluxc.store.AccountStore
 import org.wordpress.android.fluxc.store.AccountStore.OnAccountChanged
 import org.wordpress.android.fluxc.store.SiteStore
-import org.wordpress.android.fluxc.store.SiteStore.OnSiteChanged
 import org.wordpress.android.fluxc.store.WooCommerceStore
 import org.wordpress.android.fluxc.store.WooCommerceStore.OnApiVersionFetched
+import org.wordpress.android.fluxc.store.WooCommerceStore.OnWCSimpleSitesFetched
 import javax.inject.Inject
 
 class SitePickerPresenter @Inject constructor(
@@ -35,13 +37,9 @@ class SitePickerPresenter @Inject constructor(
         view = null
     }
 
-    override fun fetchSites() {
-        dispatcher.dispatch(SiteActionBuilder.newFetchSitesAction())
+    override fun fetchWooSites() {
+        dispatcher.dispatch(WCCoreActionBuilder.newFetchWooSimpleSitesAction())
     }
-
-    override fun getWooCommerceSites() = wooCommerceStore.getWooCommerceSites()
-
-    override fun getSiteBySiteId(siteId: Long): SiteModel? = siteStore.getSiteBySiteId(siteId)
 
     override fun getUserAvatarUrl() = accountStore.account?.avatarUrl
 
@@ -58,21 +56,16 @@ class SitePickerPresenter @Inject constructor(
         return accountStore.hasAccessToken()
     }
 
-    override fun loadSites() {
-        val wcSites = wooCommerceStore.getWooCommerceSites()
-        view?.showStoreList(wcSites)
-    }
-
     override fun verifySiteApiVersion(site: SiteModel) {
         dispatcher.dispatch(WCCoreActionBuilder.newFetchSiteApiVersionAction(site))
     }
 
-    override fun updateWooSiteSettings(site: SiteModel) {
-        dispatcher.dispatch(WCCoreActionBuilder.newFetchSiteSettingsAction(site))
+    override fun updateWooSite(site: SiteModel) {
+        dispatcher.dispatch(SiteActionBuilder.newFetchSiteAction(site))
     }
 
-    override fun getSitesForLocalIds(siteIdList: IntArray): List<SiteModel> {
-        return siteIdList.map { siteStore.getSiteByLocalId(it) }
+    override fun updateWooSiteSettings(site: SiteModel) {
+        dispatcher.dispatch(WCCoreActionBuilder.newFetchSiteSettingsAction(site))
     }
 
     @Suppress("unused")
@@ -85,9 +78,13 @@ class SitePickerPresenter @Inject constructor(
 
     @Suppress("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onSiteChanged(event: OnSiteChanged) {
+    fun onWCSimpleSitesFetched(event: OnWCSimpleSitesFetched) {
         if (!event.isError) {
-            loadSites()
+            AnalyticsTracker.track(
+                    Stat.SITE_PICKER_STORES_SHOWN,
+                    mapOf(AnalyticsTracker.KEY_NUMBER_OF_STORES to event.simpleSites.size)
+            )
+            view?.showStoreList(event.simpleSites)
         }
     }
 

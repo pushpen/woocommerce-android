@@ -41,8 +41,10 @@ object StringUtils {
      *      https://baseurl.com -> baseurl.com
      *      https://baseurl.com/mysite -> baseurl.com/mysite
      */
-    fun getSiteDomainAndPath(site: SiteModel): String {
-        site.url?.let {
+    fun getSiteDomainAndPath(site: SiteModel) = getSiteDomainAndPath(site.url)
+
+    fun getSiteDomainAndPath(url: String?): String {
+        url?.let {
             val uri = Uri.parse(it)
             return uri.host.orEmpty() + uri.path.orEmpty()
         } ?: return ""

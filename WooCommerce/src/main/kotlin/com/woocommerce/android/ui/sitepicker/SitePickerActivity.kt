@@ -32,13 +32,13 @@ import com.woocommerce.android.util.CrashlyticsUtils
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_site_picker.*
 import org.wordpress.android.fluxc.model.SiteModel
+import org.wordpress.android.fluxc.model.WCSimpleSiteModel
 import org.wordpress.android.login.LoginMode
 import org.wordpress.android.util.DisplayUtils
 import javax.inject.Inject
 
 class SitePickerActivity : AppCompatActivity(), SitePickerContract.View, OnSiteClickListener {
     companion object {
-        private const val STATE_KEY_SITE_ID_LIST = "key-supported-site-id-list"
         private const val KEY_CALLED_FROM_LOGIN = "called_from_login"
 
         fun showSitePickerFromLogin(context: Context) {
@@ -110,18 +110,11 @@ class SitePickerActivity : AppCompatActivity(), SitePickerContract.View, OnSiteC
         showUserInfo()
 
         savedInstanceState?.let { bundle ->
-            val sites = presenter.getSitesForLocalIds(bundle.getIntArray(STATE_KEY_SITE_ID_LIST))
-            showStoreList(sites)
+            // TODO
         } ?: run {
             site_list_container.visibility = View.GONE
 
-            presenter.loadSites()
-            presenter.fetchSites()
-
-            AnalyticsTracker.track(
-                    Stat.SITE_PICKER_STORES_SHOWN,
-                    mapOf(AnalyticsTracker.KEY_NUMBER_OF_STORES to presenter.getWooCommerceSites().size)
-            )
+            presenter.fetchWooSites()
         }
     }
 
@@ -137,9 +130,6 @@ class SitePickerActivity : AppCompatActivity(), SitePickerContract.View, OnSiteC
 
     public override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-
-        val sitesList = siteAdapter.siteList.map { it.id }
-        outState.putIntArray(STATE_KEY_SITE_ID_LIST, sitesList.toIntArray())
 
         outState.putBoolean(KEY_CALLED_FROM_LOGIN, calledFromLogin)
     }
@@ -179,39 +169,39 @@ class SitePickerActivity : AppCompatActivity(), SitePickerContract.View, OnSiteC
         }
     }
 
-    override fun showStoreList(wcSites: List<SiteModel>) {
+    override fun showStoreList(simpleSites: List<WCSimpleSiteModel>) {
         progressDialog?.takeIf { it.isShowing }?.dismiss()
 
-        if (wcSites.isEmpty()) {
+        if (simpleSites.isEmpty()) {
             showNoStoresView()
             return
         }
 
         site_list_container.visibility = View.VISIBLE
-        site_list_label.text = if (wcSites.size == 1) {
-            getString(R.string.login_connected_store)
-        } else if (calledFromLogin) {
-            getString(R.string.login_pick_store)
-        } else {
-            getString(R.string.site_picker_title)
+        site_list_label.text = when {
+            simpleSites.size == 1 -> getString(R.string.login_connected_store)
+            calledFromLogin -> getString(R.string.login_pick_store)
+            else -> getString(R.string.site_picker_title)
         }
 
-        siteAdapter.siteList = wcSites
+        siteAdapter.simpleSiteList = simpleSites
 
         if (selectedSite.exists()) {
             siteAdapter.selectedSiteId = selectedSite.get().siteId
         } else {
-            siteAdapter.selectedSiteId = wcSites[0].siteId
+            siteAdapter.selectedSiteId = simpleSites[0].siteId
         }
 
         button_continue.text = getString(R.string.continue_button)
         button_continue.isEnabled = true
         button_continue.setOnClickListener {
-            presenter.getSiteBySiteId(siteAdapter.selectedSiteId)?.let { site -> siteSelected(site) }
+            siteAdapter.getSelectedSite()?.toSiteModel()?.let {
+                siteSelected(it)
+            }
         }
     }
 
-    override fun onSiteClick(siteId: Long) {
+    override fun onSiteClick() {
         button_continue.isEnabled = true
     }
 
@@ -233,7 +223,8 @@ class SitePickerActivity : AppCompatActivity(), SitePickerContract.View, OnSiteC
         progressDialog = ProgressDialog.show(this, null, getString(R.string.login_verifying_site))
         presenter.verifySiteApiVersion(site)
 
-        // Preemptively also update the site settings so we have them available sooner
+        // Preemptively also update the site and site settings so we have them available sooner
+        presenter.updateWooSite(site)
         presenter.updateWooSiteSettings(site)
     }
 

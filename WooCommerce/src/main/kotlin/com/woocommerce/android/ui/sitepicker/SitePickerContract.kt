@@ -3,13 +3,11 @@ package com.woocommerce.android.ui.sitepicker
 import com.woocommerce.android.ui.base.BasePresenter
 import com.woocommerce.android.ui.base.BaseView
 import org.wordpress.android.fluxc.model.SiteModel
-import org.wordpress.android.fluxc.model.WCSimpleSiteModel
 
 interface SitePickerContract {
     interface Presenter : BasePresenter<View> {
         fun fetchWooSites()
         fun fetchWooSite(site: SiteModel)
-        fun fetchWooSiteSettings(site: SiteModel)
         fun getWooSites(): List<SiteModel>
         fun getUserAvatarUrl(): String?
         fun getUserName(): String?
@@ -20,9 +18,9 @@ interface SitePickerContract {
 
     interface View : BaseView<Presenter> {
         fun showUserInfo()
-        fun showStoreList(simpleSites: List<WCSimpleSiteModel>)
+        fun showStoreList(sites: List<SiteModel>)
         fun didLogout()
-        fun siteSelected()
+        fun siteSelected(site: SiteModel)
         fun siteFetchError()
         fun siteVerificationPassed(site: SiteModel)
         fun siteVerificationFailed(site: SiteModel)

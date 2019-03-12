@@ -32,7 +32,6 @@ import com.woocommerce.android.util.CrashlyticsUtils
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_site_picker.*
 import org.wordpress.android.fluxc.model.SiteModel
-import org.wordpress.android.fluxc.model.WCSimpleSiteModel
 import org.wordpress.android.login.LoginMode
 import org.wordpress.android.util.DisplayUtils
 import javax.inject.Inject
@@ -110,7 +109,7 @@ class SitePickerActivity : AppCompatActivity(), SitePickerContract.View, OnSiteC
         showUserInfo()
 
         // set the adapter's site list from cached site data
-        siteAdapter.setSites(presenter.getWooSites())
+        siteAdapter.siteList = presenter.getWooSites()
 
         // fetch the sites
         presenter.fetchWooSites()
@@ -167,63 +166,62 @@ class SitePickerActivity : AppCompatActivity(), SitePickerContract.View, OnSiteC
         }
     }
 
-    override fun showStoreList(simpleSites: List<WCSimpleSiteModel>) {
+    override fun showStoreList(sites: List<SiteModel>) {
         progressDialog?.takeIf { it.isShowing }?.dismiss()
 
-        if (simpleSites.isEmpty()) {
+        if (sites.isEmpty()) {
             showNoStoresView()
             return
         }
 
         site_list_container.visibility = View.VISIBLE
         site_list_label.text = when {
-            simpleSites.size == 1 -> getString(R.string.login_connected_store)
+            sites.size == 1 -> getString(R.string.login_connected_store)
             calledFromLogin -> getString(R.string.login_pick_store)
             else -> getString(R.string.site_picker_title)
         }
 
-        siteAdapter.simpleSiteList = simpleSites
+        siteAdapter.siteList = sites
 
         if (selectedSite.exists()) {
             siteAdapter.selectedSiteId = selectedSite.get().siteId
         } else {
-            siteAdapter.selectedSiteId = simpleSites[0].siteId
+            siteAdapter.selectedSiteId = sites[0].siteId
         }
 
         button_continue.text = getString(R.string.continue_button)
         button_continue.isEnabled = true
         button_continue.setOnClickListener {
-            siteSelected()
+            siteAdapter.getSelectedSite()?.let { site ->
+                siteSelected(site)
+            }
         }
     }
 
-    override fun onSiteClick() {
+    override fun onSiteClick(siteId: Long) {
         button_continue.isEnabled = true
     }
 
-    override fun siteSelected() {
-        siteAdapter.getSelectedSite()?.toSiteModel()?.let { site ->
-            // finish if user simply selected the current site
-            currentSite?.let {
-                if (site.siteId == it.siteId) {
-                    setResult(Activity.RESULT_CANCELED)
-                    finish()
-                    return
-                }
+    override fun siteSelected(site: SiteModel) {
+        // finish if user simply selected the current site
+        currentSite?.let {
+            if (site.siteId == it.siteId) {
+                setResult(Activity.RESULT_CANCELED)
+                finish()
+                return
             }
-
-            AnalyticsTracker.track(
-                    Stat.SITE_PICKER_STORE_PICKER_CONTINUE_TAPPED,
-                    mapOf(AnalyticsTracker.KEY_SELECTED_STORE_ID to site.id)
-            )
-
-            progressDialog = ProgressDialog.show(this, null, getString(R.string.login_verifying_site))
-
-            // Update the site and site settings - once the site is fetched, the presenter will
-            // verify it's running the correct version of Woo
-            presenter.fetchWooSite(site)
-            presenter.fetchWooSiteSettings(site)
         }
+
+        AnalyticsTracker.track(
+                Stat.SITE_PICKER_STORE_PICKER_CONTINUE_TAPPED,
+                mapOf(AnalyticsTracker.KEY_SELECTED_STORE_ID to site.siteId)
+        )
+
+        progressDialog = ProgressDialog.show(this, null, getString(R.string.login_verifying_site))
+
+        // Update the site and site settings - once the site is fetched, the presenter will
+        // verify it's running the correct version of Woo
+        presenter.fetchWooSite(site)
     }
 
     override fun siteFetchError() {

@@ -63,9 +63,6 @@ class SitePickerPresenter @Inject constructor(
     override fun fetchWooSite(site: SiteModel) {
         fetchingSiteId = site.siteId
         dispatcher.dispatch(SiteActionBuilder.newFetchSiteAction(site))
-    }
-
-    override fun fetchWooSiteSettings(site: SiteModel) {
         dispatcher.dispatch(WCCoreActionBuilder.newFetchSiteSettingsAction(site))
     }
 
@@ -85,7 +82,11 @@ class SitePickerPresenter @Inject constructor(
                     Stat.SITE_PICKER_STORES_SHOWN,
                     mapOf(AnalyticsTracker.KEY_NUMBER_OF_STORES to event.simpleSites.size)
             )
-            view?.showStoreList(event.simpleSites)
+            val sites = ArrayList<SiteModel>()
+            event.simpleSites.forEach {
+                sites.add(it.toSiteModel())
+            }
+            view?.showStoreList(sites)
         }
     }
 

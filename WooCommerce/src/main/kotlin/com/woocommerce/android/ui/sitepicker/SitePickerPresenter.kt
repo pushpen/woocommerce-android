@@ -14,6 +14,7 @@ import org.wordpress.android.fluxc.model.SiteModel
 import org.wordpress.android.fluxc.store.AccountStore
 import org.wordpress.android.fluxc.store.AccountStore.OnAccountChanged
 import org.wordpress.android.fluxc.store.SiteStore
+import org.wordpress.android.fluxc.store.SiteStore.OnSiteChanged
 import org.wordpress.android.fluxc.store.WooCommerceStore
 import org.wordpress.android.fluxc.store.WooCommerceStore.OnApiVersionFetched
 import org.wordpress.android.fluxc.store.WooCommerceStore.OnWCSimpleSitesFetched
@@ -26,6 +27,7 @@ class SitePickerPresenter @Inject constructor(
     private val wooCommerceStore: WooCommerceStore
 ) : SitePickerContract.Presenter {
     private var view: SitePickerContract.View? = null
+    private var fetchingSiteId: Long = 0
 
     override fun takeView(view: SitePickerContract.View) {
         dispatcher.register(this)
@@ -40,6 +42,8 @@ class SitePickerPresenter @Inject constructor(
     override fun fetchWooSites() {
         dispatcher.dispatch(WCCoreActionBuilder.newFetchWooSimpleSitesAction())
     }
+
+    override fun getWooSites(): List<SiteModel> = wooCommerceStore.getWooCommerceSites()
 
     override fun getUserAvatarUrl() = accountStore.account?.avatarUrl
 
@@ -56,15 +60,12 @@ class SitePickerPresenter @Inject constructor(
         return accountStore.hasAccessToken()
     }
 
-    override fun verifySiteApiVersion(site: SiteModel) {
-        dispatcher.dispatch(WCCoreActionBuilder.newFetchSiteApiVersionAction(site))
-    }
-
-    override fun updateWooSite(site: SiteModel) {
+    override fun fetchWooSite(site: SiteModel) {
+        fetchingSiteId = site.siteId
         dispatcher.dispatch(SiteActionBuilder.newFetchSiteAction(site))
     }
 
-    override fun updateWooSiteSettings(site: SiteModel) {
+    override fun fetchWooSiteSettings(site: SiteModel) {
         dispatcher.dispatch(WCCoreActionBuilder.newFetchSiteSettingsAction(site))
     }
 
@@ -86,6 +87,22 @@ class SitePickerPresenter @Inject constructor(
             )
             view?.showStoreList(event.simpleSites)
         }
+    }
+
+    @Suppress("unused")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onSiteChanged(event: OnSiteChanged) {
+        if (event.isError) {
+            WooLog.e(T.LOGIN, "Error fetching site " +
+                    "${event.error?.type} - ${event.error?.message}")
+            view?.siteFetchError()
+            return
+        }
+
+        siteStore.getSiteBySiteId(fetchingSiteId)?.let { site ->
+            // site has been fetched, so verify it's running the right version
+            dispatcher.dispatch(WCCoreActionBuilder.newFetchSiteApiVersionAction(site))
+        } ?: view?.siteFetchError()
     }
 
     @Suppress("unused")

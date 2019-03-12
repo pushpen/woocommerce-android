@@ -12,7 +12,9 @@ import com.woocommerce.android.R
 import com.woocommerce.android.ui.sitepicker.SitePickerAdapter.SiteViewHolder
 import com.woocommerce.android.util.StringUtils
 import kotlinx.android.synthetic.main.site_picker_item.view.*
+import org.wordpress.android.fluxc.model.SiteModel
 import org.wordpress.android.fluxc.model.WCSimpleSiteModel
+import org.wordpress.android.fluxc.model.WCSimpleSiteModel.Companion
 
 class SitePickerAdapter(private val context: Context, private val listener: OnSiteClickListener) :
         RecyclerView.Adapter<SiteViewHolder>() {
@@ -38,6 +40,15 @@ class SitePickerAdapter(private val context: Context, private val listener: OnSi
     init {
         setHasStableIds(true)
     }
+
+    fun setSites(sites: List<SiteModel>) {
+        val simpleSites = ArrayList<WCSimpleSiteModel>()
+        sites.forEach {
+            simpleSites.add(WCSimpleSiteModel.fromSiteModel(it))
+        }
+        simpleSiteList = simpleSites
+    }
+
 
     override fun getItemId(position: Int): Long {
         return simpleSiteList[position].siteId

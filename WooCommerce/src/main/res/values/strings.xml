@@ -97,6 +97,7 @@
     <string name="login_configure_link">Read the %sconfiguration instructions%s.</string>
     <string name="login_pick_store">Pick store</string>
     <string name="login_connected_store">Connected store</string>
+    <string name="login_fetch_site_error">Unable to fetch this site</string>
     <string name="login_verifying_site">Verifying site…</string>
     <string name="login_verifying_site_error">Cannot connect to %s</string>
     <string name="login_update_required_title">Update Store to WooCommerce 3.5</string>

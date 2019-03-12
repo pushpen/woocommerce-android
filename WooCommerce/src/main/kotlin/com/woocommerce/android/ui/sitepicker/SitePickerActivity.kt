@@ -109,13 +109,11 @@ class SitePickerActivity : AppCompatActivity(), SitePickerContract.View, OnSiteC
 
         showUserInfo()
 
-        savedInstanceState?.let { bundle ->
-            // TODO
-        } ?: run {
-            site_list_container.visibility = View.GONE
+        // set the adapter's site list from cached site data
+        siteAdapter.setSites(presenter.getWooSites())
 
-            presenter.fetchWooSites()
-        }
+        // fetch the sites
+        presenter.fetchWooSites()
     }
 
     override fun onResume() {
@@ -195,9 +193,7 @@ class SitePickerActivity : AppCompatActivity(), SitePickerContract.View, OnSiteC
         button_continue.text = getString(R.string.continue_button)
         button_continue.isEnabled = true
         button_continue.setOnClickListener {
-            siteAdapter.getSelectedSite()?.toSiteModel()?.let {
-                siteSelected(it)
-            }
+            siteSelected()
         }
     }
 
@@ -205,27 +201,38 @@ class SitePickerActivity : AppCompatActivity(), SitePickerContract.View, OnSiteC
         button_continue.isEnabled = true
     }
 
-    override fun siteSelected(site: SiteModel) {
-        // finish if user simply selected the current site
-        currentSite?.let {
-            if (site.siteId == it.siteId) {
-                setResult(Activity.RESULT_CANCELED)
-                finish()
-                return
+    override fun siteSelected() {
+        siteAdapter.getSelectedSite()?.toSiteModel()?.let { site ->
+            // finish if user simply selected the current site
+            currentSite?.let {
+                if (site.siteId == it.siteId) {
+                    setResult(Activity.RESULT_CANCELED)
+                    finish()
+                    return
+                }
             }
+
+            AnalyticsTracker.track(
+                    Stat.SITE_PICKER_STORE_PICKER_CONTINUE_TAPPED,
+                    mapOf(AnalyticsTracker.KEY_SELECTED_STORE_ID to site.id)
+            )
+
+            progressDialog = ProgressDialog.show(this, null, getString(R.string.login_verifying_site))
+
+            // Update the site and site settings - once the site is fetched, the presenter will
+            // verify it's running the correct version of Woo
+            presenter.fetchWooSite(site)
+            presenter.fetchWooSiteSettings(site)
         }
+    }
 
-        AnalyticsTracker.track(
-                Stat.SITE_PICKER_STORE_PICKER_CONTINUE_TAPPED,
-                mapOf(AnalyticsTracker.KEY_SELECTED_STORE_ID to site.id)
-        )
-
-        progressDialog = ProgressDialog.show(this, null, getString(R.string.login_verifying_site))
-        presenter.verifySiteApiVersion(site)
-
-        // Preemptively also update the site and site settings so we have them available sooner
-        presenter.updateWooSite(site)
-        presenter.updateWooSiteSettings(site)
+    override fun siteFetchError() {
+        progressDialog?.dismiss()
+        Snackbar.make(
+                site_picker_root as ViewGroup,
+                getString(R.string.login_fetch_site_error),
+                Snackbar.LENGTH_LONG
+        ).show()
     }
 
     /**
@@ -262,6 +269,7 @@ class SitePickerActivity : AppCompatActivity(), SitePickerContract.View, OnSiteC
         progressDialog?.dismiss()
 
         val siteName = if (!TextUtils.isEmpty(site.name)) site.name else getString(R.string.untitled)
+
         Snackbar.make(
                 site_picker_root as ViewGroup,
                 getString(R.string.login_verifying_site_error, siteName),

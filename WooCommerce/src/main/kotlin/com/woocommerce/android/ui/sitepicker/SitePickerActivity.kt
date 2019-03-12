@@ -109,7 +109,12 @@ class SitePickerActivity : AppCompatActivity(), SitePickerContract.View, OnSiteC
         showUserInfo()
 
         // set the adapter's site list from cached site data
-        siteAdapter.siteList = presenter.getWooSites()
+        val sites = presenter.getWooSites()
+        if (sites.isEmpty()) {
+            progressBar.visibility = View.VISIBLE
+        } else {
+            showStoreList(sites)
+        }
 
         // fetch the sites
         presenter.fetchWooSites()
@@ -168,6 +173,7 @@ class SitePickerActivity : AppCompatActivity(), SitePickerContract.View, OnSiteC
 
     override fun showStoreList(sites: List<SiteModel>) {
         progressDialog?.takeIf { it.isShowing }?.dismiss()
+        progressBar.visibility = View.GONE
 
         if (sites.isEmpty()) {
             showNoStoresView()

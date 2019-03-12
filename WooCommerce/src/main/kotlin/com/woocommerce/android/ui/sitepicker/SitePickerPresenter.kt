@@ -82,10 +82,13 @@ class SitePickerPresenter @Inject constructor(
                     Stat.SITE_PICKER_STORES_SHOWN,
                     mapOf(AnalyticsTracker.KEY_NUMBER_OF_STORES to event.simpleSites.size)
             )
+
+            // convert the simple sites to a list of site models
             val sites = ArrayList<SiteModel>()
             event.simpleSites.forEach {
                 sites.add(it.toSiteModel())
             }
+
             view?.showStoreList(sites)
         }
     }
@@ -97,13 +100,14 @@ class SitePickerPresenter @Inject constructor(
             WooLog.e(T.LOGIN, "Error fetching site " +
                     "${event.error?.type} - ${event.error?.message}")
             view?.siteFetchError()
-            return
+        } else {
+            siteStore.getSiteBySiteId(fetchingSiteId)?.let { site ->
+                // site has been fetched, so verify it's running the right version
+                dispatcher.dispatch(WCCoreActionBuilder.newFetchSiteApiVersionAction(site))
+            } ?: view?.siteFetchError()
         }
 
-        siteStore.getSiteBySiteId(fetchingSiteId)?.let { site ->
-            // site has been fetched, so verify it's running the right version
-            dispatcher.dispatch(WCCoreActionBuilder.newFetchSiteApiVersionAction(site))
-        } ?: view?.siteFetchError()
+        fetchingSiteId = 0L
     }
 
     @Suppress("unused")

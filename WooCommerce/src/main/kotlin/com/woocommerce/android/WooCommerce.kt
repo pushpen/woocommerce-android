@@ -162,7 +162,11 @@ open class WooCommerce : MultiDexApplication(), HasActivityInjector, HasServiceI
 
             selectedSite.getIfExists()?.let {
                 dispatcher.dispatch(SiteActionBuilder.newFetchSiteAction(it))
-                dispatcher.dispatch(WCOrderActionBuilder.newFetchOrderStatusOptionsAction(FetchOrderStatusOptionsPayload(it)))
+                dispatcher.dispatch(
+                        WCOrderActionBuilder.newFetchOrderStatusOptionsAction(
+                                FetchOrderStatusOptionsPayload(it)
+                        )
+                )
             }
         }
     }

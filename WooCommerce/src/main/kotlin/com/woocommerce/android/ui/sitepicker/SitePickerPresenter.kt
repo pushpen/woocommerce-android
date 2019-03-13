@@ -11,10 +11,12 @@ import org.wordpress.android.fluxc.generated.AccountActionBuilder
 import org.wordpress.android.fluxc.generated.SiteActionBuilder
 import org.wordpress.android.fluxc.generated.WCCoreActionBuilder
 import org.wordpress.android.fluxc.model.SiteModel
+import org.wordpress.android.fluxc.model.WCSimpleSiteModel
 import org.wordpress.android.fluxc.store.AccountStore
 import org.wordpress.android.fluxc.store.AccountStore.OnAccountChanged
 import org.wordpress.android.fluxc.store.SiteStore
 import org.wordpress.android.fluxc.store.SiteStore.OnSiteChanged
+import org.wordpress.android.fluxc.store.SiteStore.OnWPComSiteFetched
 import org.wordpress.android.fluxc.store.WooCommerceStore
 import org.wordpress.android.fluxc.store.WooCommerceStore.OnApiVersionFetched
 import org.wordpress.android.fluxc.store.WooCommerceStore.OnWCSimpleSitesFetched
@@ -27,7 +29,7 @@ class SitePickerPresenter @Inject constructor(
     private val wooCommerceStore: WooCommerceStore
 ) : SitePickerContract.Presenter {
     private var view: SitePickerContract.View? = null
-    private var fetchingSiteId: Long = 0
+    private var fetchedSiteId = 0L
 
     override fun takeView(view: SitePickerContract.View) {
         dispatcher.register(this)
@@ -65,7 +67,7 @@ class SitePickerPresenter @Inject constructor(
     }
 
     override fun fetchWooSite(site: SiteModel) {
-        fetchingSiteId = site.siteId
+        fetchedSiteId = site.siteId
         dispatcher.dispatch(SiteActionBuilder.newFetchSiteAction(site))
     }
 
@@ -100,18 +102,16 @@ class SitePickerPresenter @Inject constructor(
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onSiteChanged(event: OnSiteChanged) {
         if (event.isError) {
-            WooLog.e(T.LOGIN, "Error fetching site $fetchingSiteId " +
+            WooLog.e(T.LOGIN, "Error fetching site " +
                     "${event.error?.type} - ${event.error?.message}")
             view?.siteFetchError()
         } else {
-            siteStore.getSiteBySiteId(fetchingSiteId)?.let { site ->
-                // site has been fetched, so fetch its settings and verify its running the right version
+            // site has been fetched, so fetch its settings and verify its running the right version
+            siteStore.getSiteBySiteId(fetchedSiteId)?.let { site ->
                 dispatcher.dispatch(WCCoreActionBuilder.newFetchSiteSettingsAction(site))
                 dispatcher.dispatch(WCCoreActionBuilder.newFetchSiteApiVersionAction(site))
             } ?: view?.siteFetchError()
         }
-
-        fetchingSiteId = 0L
     }
 
     @Suppress("unused")

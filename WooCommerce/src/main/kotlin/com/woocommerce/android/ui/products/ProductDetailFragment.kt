@@ -58,6 +58,7 @@ class ProductDetailFragment : Fragment(), ProductDetailContract.View {
     @Inject lateinit var networkStatus: NetworkStatus
 
     private var remoteProductId = 0L
+    private var imageHeight = 0
     private var runOnStartFunc: (() -> Unit)? = null
     private val skeletonView = SkeletonView()
 
@@ -81,6 +82,14 @@ class ProductDetailFragment : Fragment(), ProductDetailContract.View {
         presenter.takeView(this)
         (activity as? AppCompatActivity)
                 ?.supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_gridicons_cross_white_24dp)
+
+        // make image 40% of screen height
+        val displayHeight = DisplayUtils.getDisplayPixelHeight(activity)
+        imageHeight = (displayHeight * 0.4).toInt()
+        productDetail_image.layoutParams.height = imageHeight
+
+        // set the height of the gradient scrim that appears atop the image
+        image_gradient_scrim.layoutParams.height = imageHeight / 3
 
         remoteProductId = arguments?.getLong(ARG_REMOTE_PRODUCT_ID) ?: 0L
         val product = presenter.getProduct(remoteProductId)

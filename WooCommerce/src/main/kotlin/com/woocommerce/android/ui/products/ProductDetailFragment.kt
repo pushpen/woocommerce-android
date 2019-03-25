@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.StringRes
+import android.support.design.widget.AppBarLayout
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
@@ -59,6 +60,7 @@ class ProductDetailFragment : Fragment(), ProductDetailContract.View {
 
     private var remoteProductId = 0L
     private var imageHeight = 0
+    private var productName = ""
     private var runOnStartFunc: (() -> Unit)? = null
     private val skeletonView = SkeletonView()
 
@@ -80,8 +82,6 @@ class ProductDetailFragment : Fragment(), ProductDetailContract.View {
         super.onActivityCreated(savedInstanceState)
 
         presenter.takeView(this)
-        (activity as? AppCompatActivity)
-                ?.supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_gridicons_cross_white_24dp)
 
         // make image 40% of screen height
         val displayHeight = DisplayUtils.getDisplayPixelHeight(activity)
@@ -101,6 +101,26 @@ class ProductDetailFragment : Fragment(), ProductDetailContract.View {
                 presenter.fetchProduct(remoteProductId)
             }
         }
+
+        // only show title when toolbar is collapsed
+        app_bar_layout.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
+            var scrollRange = -1
+
+            override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.totalScrollRange
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    collapsing_toolbar.title = productName
+                } else {
+                    collapsing_toolbar.title = " " // space between double quotes is on purpose
+                }
+            }
+        })
+
+        productDetail_toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
     }
 
     override fun onResume() {
@@ -110,11 +130,17 @@ class ProductDetailFragment : Fragment(), ProductDetailContract.View {
 
     override fun onStart() {
         super.onStart()
+        showActionBar(false)
 
         runOnStartFunc?.let {
             it.invoke()
             runOnStartFunc = null
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        showActionBar(true)
     }
 
     override fun onDestroyView() {
@@ -157,9 +183,7 @@ class ProductDetailFragment : Fragment(), ProductDetailContract.View {
     override fun showProduct(product: WCProductModel) {
         if (!isAdded) return
 
-        if (product.name.isNotEmpty()) {
-            activity?.title = product.name
-        }
+        productName = product.name
 
         product.getFirstImageUrl()?.let {
             val imageWidth = DisplayUtils.getDisplayPixelWidth(activity)
@@ -422,6 +446,20 @@ class ProductDetailFragment : Fragment(), ProductDetailContract.View {
             }
             val title = resources.getText(R.string.product_share_dialog_title)
             activity?.startActivity(Intent.createChooser(shareIntent, title))
+        }
+    }
+
+    /**
+     * Used to hide the activity's actionBar when this fragment is showing - this is necessary so we can provide
+     * our own collapsing toolbar without conflicting with the actionBar
+     */
+    private fun showActionBar(show: Boolean) {
+        (activity as? AppCompatActivity)?.supportActionBar?.let { actionBar ->
+            if (show) {
+                actionBar.show()
+            } else {
+                actionBar.hide()
+            }
         }
     }
 }

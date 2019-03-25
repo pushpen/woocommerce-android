@@ -56,11 +56,12 @@
             </FrameLayout>
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
+                android:id="@+id/productDetail_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:elevation="@dimen/appbar_elevation"
                 app:layout_collapseMode="pin"
+                app:navigationIcon="@drawable/ic_gridicons_cross_white_24dp"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>

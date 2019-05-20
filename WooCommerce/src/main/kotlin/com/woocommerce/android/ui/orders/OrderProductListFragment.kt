@@ -2,8 +2,8 @@ package com.woocommerce.android.ui.orders
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.RecyclerView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,13 +20,13 @@ import kotlinx.android.synthetic.main.order_detail_product_list.*
 import org.wordpress.android.fluxc.model.WCOrderModel
 import javax.inject.Inject
 
-class OrderProductListFragment : Fragment(), OrderProductListContract.View {
+class OrderProductListFragment : androidx.fragment.app.Fragment(), OrderProductListContract.View {
     companion object {
         const val TAG = "OrderProductListFragment"
         const val FIELD_ORDER_IDENTIFIER = "order-identifier"
         const val FIELD_ORDER_NUMBER = "order-number"
 
-        fun newInstance(order: WCOrderModel): Fragment {
+        fun newInstance(order: WCOrderModel): androidx.fragment.app.Fragment {
             val args = Bundle()
             args.putString(FIELD_ORDER_IDENTIFIER, order.getIdentifier())
 
@@ -63,8 +63,8 @@ class OrderProductListFragment : Fragment(), OrderProductListContract.View {
         presenter.takeView(this)
         arguments?.getString(FIELD_ORDER_IDENTIFIER, null)?.let { presenter.loadOrderDetail(it) }
 
-        productList_products.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+        productList_products.addOnScrollListener(object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: androidx.recyclerview.widget.RecyclerView, dx: Int, dy: Int) {
                 if (dy > 0) onScrollDown() else if (dy < 0) onScrollUp()
             }
         })

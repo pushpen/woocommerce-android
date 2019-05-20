@@ -1,7 +1,7 @@
 package com.woocommerce.android
 
 import android.app.Application
-import android.support.test.runner.AndroidJUnitRunner
+import androidx.test.runner.AndroidJUnitRunner
 
 import android.content.Context
 

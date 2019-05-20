@@ -2,7 +2,7 @@ package com.woocommerce.android.util
 
 import android.content.Context
 import android.net.Uri
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 import android.util.Patterns
 import org.wordpress.android.fluxc.model.SiteModel
 

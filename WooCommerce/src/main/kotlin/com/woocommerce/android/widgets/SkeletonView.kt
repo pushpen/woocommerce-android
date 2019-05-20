@@ -1,8 +1,8 @@
 package com.woocommerce.android.widgets
 
 import android.os.Handler
-import android.support.annotation.IdRes
-import android.support.annotation.LayoutRes
+import androidx.annotation.IdRes
+import androidx.annotation.LayoutRes
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

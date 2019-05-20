@@ -2,7 +2,7 @@ package com.woocommerce.android.util
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.NotificationManagerCompat
+import androidx.core.app.NotificationManagerCompat
 import android.util.Base64
 import com.google.gson.Gson
 import com.woocommerce.android.push.NotificationHandler

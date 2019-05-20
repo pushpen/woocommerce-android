@@ -1,12 +1,12 @@
 package com.woocommerce.android.ui.orders
 
 import android.content.Context
-import android.support.constraint.ConstraintLayout
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -38,10 +38,10 @@ class OrderDetailOrderNoteListView @JvmOverloads constructor(ctx: Context, attrs
     fun initView(notes: List<WCOrderNoteModel>, orderDetailListener: OrderDetailNoteListener) {
         listener = orderDetailListener
 
-        val viewManager = LinearLayoutManager(context)
+        val viewManager = androidx.recyclerview.widget.LinearLayoutManager(context)
         val viewAdapter = OrderNotesAdapter(notes.toMutableList())
         val divider = AlignedDividerDecoration(context,
-                DividerItemDecoration.VERTICAL, R.id.orderNote_created, clipToMargin = false)
+                androidx.recyclerview.widget.DividerItemDecoration.VERTICAL, R.id.orderNote_created, clipToMargin = false)
 
         ContextCompat.getDrawable(context, R.drawable.list_divider)?.let { drawable ->
             divider.setDrawable(drawable)
@@ -90,12 +90,12 @@ class OrderDetailOrderNoteListView @JvmOverloads constructor(ctx: Context, attrs
     }
 
     private fun enableItemAnimator(enable: Boolean) {
-        notesList_notes.itemAnimator = if (enable) DefaultItemAnimator() else null
+        notesList_notes.itemAnimator = if (enable) androidx.recyclerview.widget.DefaultItemAnimator() else null
     }
 
     class OrderNotesAdapter(private val notes: MutableList<WCOrderNoteModel>)
-        : RecyclerView.Adapter<OrderNotesAdapter.ViewHolder>() {
-        class ViewHolder(val view: OrderDetailOrderNoteItemView) : RecyclerView.ViewHolder(view)
+        : androidx.recyclerview.widget.RecyclerView.Adapter<OrderNotesAdapter.ViewHolder>() {
+        class ViewHolder(val view: OrderDetailOrderNoteItemView) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view)
 
         init {
             setHasStableIds(true)

@@ -1,12 +1,12 @@
 package com.woocommerce.android.ui.orders
 
 import android.content.Context
-import android.support.constraint.ConstraintLayout
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -51,13 +51,13 @@ class OrderDetailProductListView @JvmOverloads constructor(ctx: Context, attrs: 
         isExpanded = expanded
 
         divider = AlignedDividerDecoration(context,
-                DividerItemDecoration.VERTICAL, R.id.productInfo_name, clipToMargin = false)
+                androidx.recyclerview.widget.DividerItemDecoration.VERTICAL, R.id.productInfo_name, clipToMargin = false)
 
         ContextCompat.getDrawable(context, R.drawable.list_divider)?.let { drawable ->
             divider.setDrawable(drawable)
         }
 
-        val viewManager = LinearLayoutManager(context)
+        val viewManager = androidx.recyclerview.widget.LinearLayoutManager(context)
         viewAdapter = ProductListAdapter(
                 order.getLineItemList(),
                 productImageMap,
@@ -89,7 +89,7 @@ class OrderDetailProductListView @JvmOverloads constructor(ctx: Context, attrs: 
         productList_products.apply {
             setHasFixedSize(false)
             layoutManager = viewManager
-            itemAnimator = DefaultItemAnimator()
+            itemAnimator = androidx.recyclerview.widget.DefaultItemAnimator()
             adapter = viewAdapter
         }
 
@@ -142,8 +142,8 @@ class OrderDetailProductListView @JvmOverloads constructor(ctx: Context, attrs: 
         private val formatCurrencyForDisplay: (String?) -> String,
         private var isExpanded: Boolean,
         private val productListener: OrderProductActionListener?
-    ) : RecyclerView.Adapter<ProductListAdapter.ViewHolder>() {
-        class ViewHolder(val view: OrderDetailProductItemView) : RecyclerView.ViewHolder(view)
+    ) : androidx.recyclerview.widget.RecyclerView.Adapter<ProductListAdapter.ViewHolder>() {
+        class ViewHolder(val view: OrderDetailProductItemView) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view)
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view: OrderDetailProductItemView = LayoutInflater.from(parent.context)

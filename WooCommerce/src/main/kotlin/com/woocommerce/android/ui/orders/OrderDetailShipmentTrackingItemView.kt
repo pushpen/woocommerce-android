@@ -3,7 +3,7 @@ package com.woocommerce.android.ui.orders
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.support.constraint.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import android.util.AttributeSet
 import android.view.View
 import com.woocommerce.android.R

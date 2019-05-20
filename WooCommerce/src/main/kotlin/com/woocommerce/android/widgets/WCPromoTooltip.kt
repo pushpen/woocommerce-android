@@ -2,8 +2,8 @@ package com.woocommerce.android.widgets
 
 import android.content.Context
 import android.os.Handler
-import android.support.annotation.StringRes
-import android.support.v4.content.ContextCompat
+import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
 import android.view.Gravity
 import android.view.View
 import com.tooltip.Tooltip

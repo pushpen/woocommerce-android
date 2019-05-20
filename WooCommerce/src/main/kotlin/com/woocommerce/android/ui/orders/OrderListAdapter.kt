@@ -1,7 +1,7 @@
 package com.woocommerce.android.ui.orders
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.text.format.DateUtils
 import android.view.View
 import android.widget.TextView
@@ -159,7 +159,7 @@ class OrderListAdapter @Inject constructor(
         }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: androidx.recyclerview.widget.RecyclerView.ViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
         if (position == itemCount - 1) {
             loadMoreListener?.onRequestLoadMore()
@@ -190,11 +190,11 @@ class OrderListAdapter @Inject constructor(
     ) {
         override fun getContentItemsTotal() = list.size
 
-        override fun getItemViewHolder(view: View): RecyclerView.ViewHolder {
+        override fun getItemViewHolder(view: View): androidx.recyclerview.widget.RecyclerView.ViewHolder {
             return ItemViewHolder(view)
         }
 
-        override fun onBindItemViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        override fun onBindItemViewHolder(holder: androidx.recyclerview.widget.RecyclerView.ViewHolder, position: Int) {
             val order = list[position]
             val itemHolder = holder as ItemViewHolder
             val resources = itemHolder.rootView.context.applicationContext.resources
@@ -232,11 +232,11 @@ class OrderListAdapter @Inject constructor(
             }
         }
 
-        override fun getHeaderViewHolder(view: View): RecyclerView.ViewHolder {
+        override fun getHeaderViewHolder(view: View): androidx.recyclerview.widget.RecyclerView.ViewHolder {
             return HeaderViewHolder(view)
         }
 
-        override fun onBindHeaderViewHolder(holder: RecyclerView.ViewHolder) {
+        override fun onBindHeaderViewHolder(holder: androidx.recyclerview.widget.RecyclerView.ViewHolder) {
             val headerViewHolder = holder as HeaderViewHolder
 
             when (TimeGroup.valueOf(title)) {
@@ -260,7 +260,7 @@ class OrderListAdapter @Inject constructor(
         }
     }
 
-    private class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    private class ItemViewHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
         var orderDate: TextView = view.orderDate
         var orderNum: TextView = view.orderNum
         var orderName: TextView = view.orderName
@@ -269,7 +269,7 @@ class OrderListAdapter @Inject constructor(
         var rootView = view
     }
 
-    private class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    private class HeaderViewHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
         val title: TextView = view.orderListHeader
     }
 }

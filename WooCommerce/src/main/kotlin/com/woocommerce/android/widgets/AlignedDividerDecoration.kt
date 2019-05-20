@@ -4,8 +4,8 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
-import android.support.constraint.ConstraintLayout
-import android.support.v7.widget.RecyclerView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 
 /**
@@ -62,7 +62,7 @@ class AlignedDividerDecoration @JvmOverloads constructor(
     private val alignEndToEndOf: Int = 0,
     private val clipToMargin: Boolean = false
 )
-    : RecyclerView.ItemDecoration() {
+    : androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
     companion object {
         const val HORIZONTAL = 0
         const val VERTICAL = 1
@@ -80,7 +80,7 @@ class AlignedDividerDecoration @JvmOverloads constructor(
 
     private val bounds = Rect()
 
-    override fun onDrawOver(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+    override fun onDrawOver(canvas: Canvas, parent: androidx.recyclerview.widget.RecyclerView, state: androidx.recyclerview.widget.RecyclerView.State) {
         if (parent.layoutManager == null) {
             return
         }
@@ -92,7 +92,7 @@ class AlignedDividerDecoration @JvmOverloads constructor(
         }
     }
 
-    private fun drawForVertical(canvas: Canvas, parent: RecyclerView) {
+    private fun drawForVertical(canvas: Canvas, parent: androidx.recyclerview.widget.RecyclerView) {
         val adjustedChildCount = parent.childCount - 2
         (0..adjustedChildCount)
                 .map { parent.getChildAt(it) }
@@ -119,7 +119,7 @@ class AlignedDividerDecoration @JvmOverloads constructor(
                 }
     }
 
-    private fun drawForHorizontal(canvas: Canvas, parent: RecyclerView) {
+    private fun drawForHorizontal(canvas: Canvas, parent: androidx.recyclerview.widget.RecyclerView) {
         val adjustedChildCount = parent.childCount - 2
         (0..adjustedChildCount)
                 .map { parent.getChildAt(it) }
@@ -148,7 +148,7 @@ class AlignedDividerDecoration @JvmOverloads constructor(
                 }
     }
 
-    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+    override fun getItemOffsets(outRect: Rect, view: View, parent: androidx.recyclerview.widget.RecyclerView, state: androidx.recyclerview.widget.RecyclerView.State) {
         if (orientation == VERTICAL) {
             outRect.set(0, 0, 0, divider.intrinsicHeight)
         } else {

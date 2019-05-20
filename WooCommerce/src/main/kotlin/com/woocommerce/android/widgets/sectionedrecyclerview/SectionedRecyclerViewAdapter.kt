@@ -1,7 +1,7 @@
 package com.woocommerce.android.widgets.sectionedrecyclerview
 
-import android.support.annotation.VisibleForTesting
-import android.support.v7.widget.RecyclerView
+import androidx.annotation.VisibleForTesting
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +18,7 @@ import java.util.UUID
  *
  * Original version: https://github.com/luizgrp/SectionedRecyclerViewAdapter
  */
-open class SectionedRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+open class SectionedRecyclerViewAdapter : androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>() {
     /**
      * Return a map with all mSections of this adapter.
      *
@@ -28,8 +28,8 @@ open class SectionedRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.View
     private val sectionViewTypeNumbers: HashMap<String, Int> = HashMap()
     private var viewTypeCount = 0
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        var viewHolder: RecyclerView.ViewHolder? = null
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): androidx.recyclerview.widget.RecyclerView.ViewHolder {
+        var viewHolder: androidx.recyclerview.widget.RecyclerView.ViewHolder? = null
 
         for (entry in sectionViewTypeNumbers) {
             if (viewType >= entry.value && viewType < entry.value + VIEW_TYPE_QTY) {
@@ -63,7 +63,7 @@ open class SectionedRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.View
         return viewHolder!!
     }
 
-    private fun getItemViewHolder(parent: ViewGroup, section: Section): RecyclerView.ViewHolder {
+    private fun getItemViewHolder(parent: ViewGroup, section: Section): androidx.recyclerview.widget.RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(
                 section.itemResourceId,
                 parent, false
@@ -72,7 +72,7 @@ open class SectionedRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.View
         return section.getItemViewHolder(view)
     }
 
-    private fun getHeaderViewHolder(parent: ViewGroup, section: Section): RecyclerView.ViewHolder {
+    private fun getHeaderViewHolder(parent: ViewGroup, section: Section): androidx.recyclerview.widget.RecyclerView.ViewHolder {
         val resId = section.headerResourceId ?: throw NullPointerException("Missing 'header' resource id")
 
         val view = LayoutInflater.from(parent.context).inflate(resId, parent, false)
@@ -80,7 +80,7 @@ open class SectionedRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.View
         return section.getHeaderViewHolder(view)
     }
 
-    private fun getFooterViewHolder(parent: ViewGroup, section: Section): RecyclerView.ViewHolder {
+    private fun getFooterViewHolder(parent: ViewGroup, section: Section): androidx.recyclerview.widget.RecyclerView.ViewHolder {
         val resId = section.footerResourceId ?: throw NullPointerException("Missing 'footer' resource id")
 
         val view = LayoutInflater.from(parent.context).inflate(resId, parent, false)
@@ -88,7 +88,7 @@ open class SectionedRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.View
         return section.getFooterViewHolder(view)
     }
 
-    private fun getLoadingViewHolder(parent: ViewGroup, section: Section): RecyclerView.ViewHolder {
+    private fun getLoadingViewHolder(parent: ViewGroup, section: Section): androidx.recyclerview.widget.RecyclerView.ViewHolder {
         val resId = section.loadingResourceId ?: throw NullPointerException("Missing 'loading state' resource id")
 
         val view = LayoutInflater.from(parent.context).inflate(resId, parent, false)
@@ -96,7 +96,7 @@ open class SectionedRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.View
         return section.getLoadingViewHolder(view)
     }
 
-    private fun getFailedViewHolder(parent: ViewGroup, section: Section): RecyclerView.ViewHolder {
+    private fun getFailedViewHolder(parent: ViewGroup, section: Section): androidx.recyclerview.widget.RecyclerView.ViewHolder {
         val resId = section.failedResourceId ?: throw NullPointerException("Missing 'failed state' resource id")
 
         val view = LayoutInflater.from(parent.context).inflate(resId, parent, false)
@@ -104,7 +104,7 @@ open class SectionedRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.View
         return section.getFailedViewHolder(view)
     }
 
-    private fun getEmptyViewHolder(parent: ViewGroup, section: Section): RecyclerView.ViewHolder {
+    private fun getEmptyViewHolder(parent: ViewGroup, section: Section): androidx.recyclerview.widget.RecyclerView.ViewHolder {
         val resId = section.emptyResourceId ?: throw NullPointerException("Missing 'empty state' resource id")
 
         val view = LayoutInflater.from(parent.context).inflate(resId, parent, false)
@@ -164,7 +164,7 @@ open class SectionedRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.View
         this.sectionsMap.clear()
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: androidx.recyclerview.widget.RecyclerView.ViewHolder, position: Int) {
         var currentPos = 0
 
         for (entry in sectionsMap) {
@@ -1061,7 +1061,7 @@ open class SectionedRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.View
      * Should be used to avoid the boilerplate of creating a ViewHolder class for simple case
      * scenarios.
      */
-    class EmptyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    class EmptyViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView)
 
     companion object {
         private const val VIEW_TYPE_HEADER = 0

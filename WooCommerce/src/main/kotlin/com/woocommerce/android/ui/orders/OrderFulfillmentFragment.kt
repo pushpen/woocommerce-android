@@ -2,8 +2,8 @@ package com.woocommerce.android.ui.orders
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.widget.NestedScrollView
+import androidx.fragment.app.Fragment
+import androidx.core.widget.NestedScrollView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,13 +22,13 @@ import kotlinx.android.synthetic.main.fragment_order_fulfillment.*
 import org.wordpress.android.fluxc.model.WCOrderModel
 import javax.inject.Inject
 
-class OrderFulfillmentFragment : Fragment(), OrderFulfillmentContract.View, View.OnClickListener {
+class OrderFulfillmentFragment : androidx.fragment.app.Fragment(), OrderFulfillmentContract.View, View.OnClickListener {
     companion object {
         const val TAG = "OrderFulfillmentFragment"
         const val FIELD_ORDER_IDENTIFIER = "order-identifier"
         const val FIELD_ORDER_NUMBER = "order-number"
 
-        fun newInstance(order: WCOrderModel): Fragment {
+        fun newInstance(order: WCOrderModel): androidx.fragment.app.Fragment {
             val args = Bundle()
             args.putString(FIELD_ORDER_IDENTIFIER, order.getIdentifier())
 

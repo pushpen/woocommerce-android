@@ -5,12 +5,12 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.Toolbar
+import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.appcompat.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -43,12 +43,12 @@ class WooLogViewerActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val divider = AlignedDividerDecoration(this,
-                DividerItemDecoration.VERTICAL, 0, clipToMargin = false)
+                androidx.recyclerview.widget.DividerItemDecoration.VERTICAL, 0, clipToMargin = false)
         ContextCompat.getDrawable(this, R.drawable.list_divider)?.let { drawable ->
             divider.setDrawable(drawable)
         }
 
-        recycler.layoutManager = LinearLayoutManager(this)
+        recycler.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
         recycler.addItemDecoration(divider)
         recycler.adapter = LogAdapter(this)
     }
@@ -110,7 +110,7 @@ class WooLogViewerActivity : AppCompatActivity() {
         }
     }
 
-    private inner class LogAdapter constructor(context: Context) : RecyclerView.Adapter<LogViewHolder>() {
+    private inner class LogAdapter constructor(context: Context) : androidx.recyclerview.widget.RecyclerView.Adapter<LogViewHolder>() {
         private val entries: ArrayList<String> = WooLog.toHtmlList()
         private val inflater: LayoutInflater = LayoutInflater.from(context)
 
@@ -128,7 +128,7 @@ class WooLogViewerActivity : AppCompatActivity() {
         }
     }
 
-    private inner class LogViewHolder internal constructor(view: View) : RecyclerView.ViewHolder(view) {
+    private inner class LogViewHolder internal constructor(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
         val txtLineNumber: TextView = view.findViewById(R.id.text_line) as TextView
         val txtLogEntry: TextView = view.findViewById(R.id.text_log) as TextView
     }

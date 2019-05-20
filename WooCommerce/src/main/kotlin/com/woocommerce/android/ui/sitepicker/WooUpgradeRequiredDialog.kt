@@ -1,8 +1,8 @@
 package com.woocommerce.android.ui.sitepicker
 
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v4.app.FragmentManager
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +11,7 @@ import android.widget.Button
 import com.woocommerce.android.R
 import com.woocommerce.android.util.ChromeCustomTabUtils
 
-class WooUpgradeRequiredDialog : DialogFragment() {
+class WooUpgradeRequiredDialog : androidx.fragment.app.DialogFragment() {
     companion object {
         private const val TAG = "WooUpgradeRequiredDialog"
         private const val URL_UPGRADE_WOOCOMMERCE = "https://docs.woocommerce.com/document/how-to-update-woocommerce/"
@@ -41,7 +41,7 @@ class WooUpgradeRequiredDialog : DialogFragment() {
         super.onResume()
     }
 
-    fun show(manager: FragmentManager) {
+    fun show(manager: androidx.fragment.app.FragmentManager) {
         val ft = manager.beginTransaction()
         val prev = manager.findFragmentByTag(TAG)
         if (prev != null) {

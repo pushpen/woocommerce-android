@@ -2,9 +2,9 @@ package com.woocommerce.android.ui.dashboard
 
 import android.content.Context
 import android.os.Handler
-import android.support.annotation.StringRes
-import android.support.design.widget.TabLayout
-import android.support.v4.content.ContextCompat
+import androidx.annotation.StringRes
+import com.google.android.material.tabs.TabLayout
+import androidx.core.content.ContextCompat
 import android.text.format.DateFormat
 import android.util.AttributeSet
 import android.view.LayoutInflater

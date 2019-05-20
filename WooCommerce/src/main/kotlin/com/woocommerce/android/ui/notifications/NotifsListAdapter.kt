@@ -7,10 +7,10 @@ import android.graphics.PorterDuff
 import android.graphics.Rect
 import android.graphics.drawable.LayerDrawable
 import android.os.Build
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.RecyclerView.ViewHolder
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import android.view.View
 import android.widget.ImageView
 import android.widget.RatingBar
@@ -351,7 +351,7 @@ class NotifsListAdapter @Inject constructor(context: Context) : SectionedRecycle
 
         override fun getItemViewHolder(view: View) = ItemViewHolder(view)
 
-        override fun onBindItemViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        override fun onBindItemViewHolder(holder: androidx.recyclerview.widget.RecyclerView.ViewHolder, position: Int) {
             val notif = list[position]
             val itemHolder = holder as ItemViewHolder
             itemHolder.rating.visibility = View.GONE
@@ -402,20 +402,20 @@ class NotifsListAdapter @Inject constructor(context: Context) : SectionedRecycle
         }
     }
 
-    private class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    private class ItemViewHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
         var icon: ImageView = view.notif_icon
         var title: TextView = view.notif_title
         var desc: TextView = view.notif_desc
         var rating: RatingBar = view.notif_rating
     }
 
-    private class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    private class HeaderViewHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
         val title: TextView = view.orderListHeader
     }
 
-    class NotifsListItemDecoration(context: Context) : DividerItemDecoration(
+    class NotifsListItemDecoration(context: Context) : androidx.recyclerview.widget.DividerItemDecoration(
             context,
-            DividerItemDecoration.HORIZONTAL
+            androidx.recyclerview.widget.DividerItemDecoration.HORIZONTAL
     ) {
         private val dividerWidth = DisplayUtils.dpToPx(context, 3).toFloat()
 
@@ -426,7 +426,7 @@ class NotifsListAdapter @Inject constructor(context: Context) : SectionedRecycle
             decorListener = listener
         }
 
-        override fun onDrawOver(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+        override fun onDrawOver(canvas: Canvas, parent: androidx.recyclerview.widget.RecyclerView, state: androidx.recyclerview.widget.RecyclerView.State) {
             for (i in 0 until parent.childCount - 1) {
                 val child = parent.getChildAt(i)
                 val position = child?.let { parent.getChildAdapterPosition(it) } ?: INVALID_POSITION

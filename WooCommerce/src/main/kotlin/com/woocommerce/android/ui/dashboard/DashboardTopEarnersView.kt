@@ -1,11 +1,11 @@
 package com.woocommerce.android.ui.dashboard
 
 import android.content.Context
-import android.support.annotation.StringRes
-import android.support.design.widget.TabLayout
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.annotation.StringRes
+import com.google.android.material.tabs.TabLayout
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -59,9 +59,9 @@ class DashboardTopEarnersView @JvmOverloads constructor(ctx: Context, attrs: Att
         this.selectedSite = selectedSite
         this.formatCurrencyForDisplay = formatCurrencyForDisplay
 
-        topEarners_recycler.layoutManager = LinearLayoutManager(context)
+        topEarners_recycler.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
         topEarners_recycler.adapter = TopEarnersAdapter(context, formatCurrencyForDisplay, listener)
-        topEarners_recycler.itemAnimator = DefaultItemAnimator()
+        topEarners_recycler.itemAnimator = androidx.recyclerview.widget.DefaultItemAnimator()
 
         StatsGranularity.values().forEach { granularity ->
             val tab = topEarners_tab_layout.newTab().apply {
@@ -126,7 +126,7 @@ class DashboardTopEarnersView @JvmOverloads constructor(ctx: Context, attrs: Att
         }
     }
 
-    class TopEarnersViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class TopEarnersViewHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {
         var productNameText: TextView = view.text_ProductName
         var productOrdersText: TextView = view.text_ProductOrders
         var totalSpendText: TextView = view.text_TotalSpend
@@ -138,7 +138,7 @@ class DashboardTopEarnersView @JvmOverloads constructor(ctx: Context, attrs: Att
         context: Context,
         val formatCurrencyForDisplay: FormatCurrencyRounded,
         val listener: DashboardStatsListener
-    ) : RecyclerView.Adapter<TopEarnersViewHolder>() {
+    ) : androidx.recyclerview.widget.RecyclerView.Adapter<TopEarnersViewHolder>() {
         private val orderString: String
         private val imageSize: Int
         private val topEarnerList: ArrayList<WCTopEarnerModel> = ArrayList()

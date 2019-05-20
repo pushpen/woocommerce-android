@@ -2,8 +2,8 @@ package com.woocommerce.android.ui.prefs
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.fragment_about.*
 import org.wordpress.android.util.DisplayUtils
 import java.util.Calendar
 
-class AboutFragment : Fragment() {
+class AboutFragment : androidx.fragment.app.Fragment() {
     companion object {
         const val TAG = "about"
         private const val URL_AUTOMATTIC = "https://www.automattic.com/"

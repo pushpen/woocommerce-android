@@ -1,7 +1,7 @@
 package com.woocommerce.android.ui.main
 
 import android.content.Intent
-import android.support.test.rule.ActivityTestRule
+import androidx.test.rule.ActivityTestRule
 import com.woocommerce.android.di.MockedSelectedSiteModule
 import org.wordpress.android.fluxc.model.SiteModel
 

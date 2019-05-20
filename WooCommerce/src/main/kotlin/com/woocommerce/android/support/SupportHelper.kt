@@ -1,8 +1,8 @@
 package com.woocommerce.android.support
 
 import android.content.Context
-import android.support.v7.app.AlertDialog
-import android.support.v7.view.ContextThemeWrapper
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE

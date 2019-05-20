@@ -1,13 +1,13 @@
 package com.woocommerce.android.ui.main
 
 import android.content.Context
-import android.support.design.internal.BottomNavigationItemView
-import android.support.design.internal.BottomNavigationMenuView
-import android.support.design.widget.BottomNavigationView
-import android.support.design.widget.BottomNavigationView.OnNavigationItemReselectedListener
-import android.support.design.widget.BottomNavigationView.OnNavigationItemSelectedListener
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
+import com.google.android.material.bottomnavigation.BottomNavigationItemView
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.bottomnavigation.BottomNavigationView.OnNavigationItemReselectedListener
+import com.google.android.material.bottomnavigation.BottomNavigationView.OnNavigationItemSelectedListener
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import android.util.AttributeSet
 import android.util.SparseArray
 import android.view.LayoutInflater
@@ -27,7 +27,7 @@ class MainNavigationView @JvmOverloads constructor(
 ) : BottomNavigationView(context, attrs, defStyleAttr),
         OnNavigationItemSelectedListener, OnNavigationItemReselectedListener {
     private lateinit var navAdapter: NavAdapter
-    private lateinit var fragmentManager: FragmentManager
+    private lateinit var fragmentManager: androidx.fragment.app.FragmentManager
     private lateinit var listener: MainNavigationListener
     private lateinit var badgeView: View
 
@@ -48,7 +48,7 @@ class MainNavigationView @JvmOverloads constructor(
         get() = findNavigationPositionById(selectedItemId)
         set(navPos) = updateCurrentPosition(navPos)
 
-    fun init(fm: FragmentManager, listener: MainNavigationListener) {
+    fun init(fm: androidx.fragment.app.FragmentManager, listener: MainNavigationListener) {
         this.fragmentManager = fm
         this.listener = listener
 
@@ -151,7 +151,7 @@ class MainNavigationView @JvmOverloads constructor(
      * Pop all child fragments to return to the top-level view.
      * returns true if child fragments existed.
      */
-    private fun clearFragmentBackStack(fragment: Fragment?): Boolean {
+    private fun clearFragmentBackStack(fragment: androidx.fragment.app.Fragment?): Boolean {
         fragment?.let {
             if (!it.isAdded) {
                 return false
@@ -159,7 +159,7 @@ class MainNavigationView @JvmOverloads constructor(
             with(it.childFragmentManager) {
                 if (backStackEntryCount > 0) {
                     val firstEntry = getBackStackEntryAt(0)
-                    popBackStackImmediate(firstEntry.id, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                    popBackStackImmediate(firstEntry.id, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     return true
                 }
             }
@@ -171,7 +171,7 @@ class MainNavigationView @JvmOverloads constructor(
      * Extension function for retrieving an existing fragment from the [FragmentManager]
      * if one exists, if not, create a new instance of the requested fragment.
      */
-    private fun FragmentManager.findFragment(position: BottomNavigationPosition): TopLevelFragment {
+    private fun androidx.fragment.app.FragmentManager.findFragment(position: BottomNavigationPosition): TopLevelFragment {
         return (findFragmentByTag(position.getTag()) ?: position.createFragment()) as TopLevelFragment
     }
 

@@ -3,7 +3,7 @@ package com.woocommerce.android.ui.orders
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
+import androidx.fragment.app.DialogFragment
 import com.woocommerce.android.R
 import com.woocommerce.android.analytics.AnalyticsTracker
 import com.woocommerce.android.analytics.AnalyticsTracker.Stat
@@ -16,7 +16,7 @@ import org.wordpress.android.fluxc.model.WCOrderStatusModel
  * This fragment should be instantiated using the [OrderStatusSelectorDialog.newInstance] method. Calling classes
  * can obtain the results of selection through the [OrderStatusDialogListener].
  */
-class OrderStatusSelectorDialog : DialogFragment() {
+class OrderStatusSelectorDialog : androidx.fragment.app.DialogFragment() {
     companion object {
         const val TAG: String = "OrderStatusSelectorDialog"
 

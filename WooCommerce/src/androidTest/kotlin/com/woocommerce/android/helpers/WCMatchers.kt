@@ -1,7 +1,7 @@
 package com.woocommerce.android.helpers
 
-import android.support.test.espresso.matcher.BoundedMatcher
-import android.support.v7.widget.Toolbar
+import androidx.test.espresso.matcher.BoundedMatcher
+import androidx.appcompat.widget.Toolbar
 import android.view.View
 import android.widget.ListView
 import org.hamcrest.Description

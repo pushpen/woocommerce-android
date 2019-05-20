@@ -4,9 +4,9 @@ import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
-import android.support.v4.widget.NestedScrollView
+import com.google.android.material.snackbar.Snackbar
+import androidx.fragment.app.Fragment
+import androidx.core.widget.NestedScrollView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,7 +35,7 @@ import org.wordpress.android.fluxc.model.order.OrderIdentifier
 import org.wordpress.android.fluxc.network.rest.wpcom.wc.order.CoreOrderStatus
 import javax.inject.Inject
 
-class OrderDetailFragment : Fragment(), OrderDetailContract.View, OrderDetailNoteListener,
+class OrderDetailFragment : androidx.fragment.app.Fragment(), OrderDetailContract.View, OrderDetailNoteListener,
         OrderStatusSelectorDialog.OrderStatusDialogListener {
     companion object {
         const val TAG = "OrderDetailFragment"
@@ -48,7 +48,7 @@ class OrderDetailFragment : Fragment(), OrderDetailContract.View, OrderDetailNot
             orderId: OrderIdentifier,
             remoteNoteId: Long? = null,
             markComplete: Boolean = false
-        ): Fragment {
+        ): androidx.fragment.app.Fragment {
             val args = Bundle()
             args.putString(FIELD_ORDER_IDENTIFIER, orderId)
 
@@ -68,7 +68,7 @@ class OrderDetailFragment : Fragment(), OrderDetailContract.View, OrderDetailNot
             remoteOrderId: Long,
             remoteNoteId: Long? = null,
             markComplete: Boolean = false
-        ): Fragment {
+        ): androidx.fragment.app.Fragment {
             val orderIdentifier = OrderIdentifier(localSiteId, remoteOrderId)
             return newInstance(orderIdentifier, remoteNoteId, markComplete)
         }

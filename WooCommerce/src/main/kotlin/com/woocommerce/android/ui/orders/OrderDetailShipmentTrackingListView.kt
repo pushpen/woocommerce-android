@@ -1,11 +1,11 @@
 package com.woocommerce.android.ui.orders
 
 import android.content.Context
-import android.support.constraint.ConstraintLayout
-import android.support.v7.widget.DefaultItemAnimator
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -24,14 +24,19 @@ class OrderDetailShipmentTrackingListView @JvmOverloads constructor(
     }
 
     fun initView(trackings: List<WCOrderShipmentTrackingModel>, uiMessageResolver: UIMessageResolver) {
-        val viewManager = LinearLayoutManager(context)
+        val viewManager = androidx.recyclerview.widget.LinearLayoutManager(context)
         val viewAdapter = ShipmentTrackingListAdapter(trackings, uiMessageResolver)
 
         shipmentTrack_items.apply {
             setHasFixedSize(true)
             layoutManager = viewManager
-            itemAnimator = DefaultItemAnimator()
-            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+            itemAnimator = androidx.recyclerview.widget.DefaultItemAnimator()
+            addItemDecoration(
+                    androidx.recyclerview.widget.DividerItemDecoration(
+                            context,
+                            androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
+                    )
+            )
             adapter = viewAdapter
         }
     }
@@ -39,8 +44,8 @@ class OrderDetailShipmentTrackingListView @JvmOverloads constructor(
     class ShipmentTrackingListAdapter(
         private val trackings: List<WCOrderShipmentTrackingModel>,
         private val uiMessageResolver: UIMessageResolver
-    ) : RecyclerView.Adapter<ShipmentTrackingListAdapter.ViewHolder>() {
-        class ViewHolder(val view: OrderDetailShipmentTrackingItemView) : RecyclerView.ViewHolder(view)
+    ) : androidx.recyclerview.widget.RecyclerView.Adapter<ShipmentTrackingListAdapter.ViewHolder>() {
+        class ViewHolder(val view: OrderDetailShipmentTrackingItemView) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view)
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view: OrderDetailShipmentTrackingItemView = LayoutInflater.from(parent.context)

@@ -1,8 +1,8 @@
 package com.woocommerce.android.ui.products
 
 import android.content.Context
-import android.support.constraint.ConstraintLayout
-import android.support.v7.app.AlertDialog
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.appcompat.app.AlertDialog
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewTreeObserver.OnGlobalLayoutListener

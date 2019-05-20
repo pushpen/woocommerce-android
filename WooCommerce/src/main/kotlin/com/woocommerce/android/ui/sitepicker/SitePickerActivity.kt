@@ -5,12 +5,12 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.content.res.AppCompatResources
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.Toolbar
+import com.google.android.material.snackbar.Snackbar
+import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.appcompat.widget.Toolbar
 import android.text.TextUtils
 import android.view.MenuItem
 import android.view.View
@@ -105,7 +105,7 @@ class SitePickerActivity : AppCompatActivity(), SitePickerContract.View, OnSiteC
 
         presenter.takeView(this)
 
-        sites_recycler.layoutManager = LinearLayoutManager(this)
+        sites_recycler.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this)
         siteAdapter = SitePickerAdapter(this, this)
         sites_recycler.adapter = siteAdapter
 

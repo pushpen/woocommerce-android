@@ -2,8 +2,8 @@ package com.woocommerce.android.ui.orders
 
 import android.content.Context
 import android.os.Build
-import android.support.constraint.ConstraintLayout
-import android.support.v4.content.ContextCompat
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import android.text.Html
 import android.text.Spanned
 import android.util.AttributeSet
